@@ -1,5 +1,6 @@
 package com.github.dicomflow.dicomflowjavalib.dicomobjects;
 
+import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Root;
 
 import java.util.Map;
@@ -10,7 +11,7 @@ import java.util.Map;
 @Root
 public class Domain extends ValueObject {
 
-    public Domain(String value) {
+    public Domain(@Attribute(name = "value") String value) {
         super(value);
     }
 

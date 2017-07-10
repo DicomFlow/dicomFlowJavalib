@@ -1,5 +1,6 @@
 package com.github.dicomflow.dicomflowjavalib.dicomobjects;
 
+import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Root;
 
 import java.util.Map;
@@ -9,7 +10,7 @@ import java.util.Map;
  */
 @Root
 public class Mail extends ValueObject{
-    public Mail(String value) {
+    public Mail(@Attribute(name = "value") String value) {
         super(value);
     }
 

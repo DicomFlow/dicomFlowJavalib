@@ -27,6 +27,13 @@ public abstract class Certificate extends Service {
         this.port = port;
     }
 
+    public Certificate(String name, String action, String from, String version, String timeout, String timestamp, String messageID,
+                       Domain domain, Mail mail, Port port) {
+        super(name, action, from, version, timeout, timestamp, messageID);
+        this.domain = domain;
+        this.mail = mail;
+        this.port = port;
+    }
     public Certificate(Map<String, Object> params) {
         super(params);
 

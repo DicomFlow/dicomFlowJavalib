@@ -13,7 +13,6 @@ public abstract class ValueObject extends SimplestDicomFlowObject{
     @Attribute(name = "value") public final String value;
 
     public ValueObject(@Attribute(name = "value") String value) {
-        super(null);
         this.value = value;
     }
 

@@ -7,6 +7,7 @@ import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,7 +22,7 @@ public class Data extends SimplestDicomFlowObject{
 
     public Data(
             @Attribute(name = "filename") String filename,
-            @Element(name = "bytes") String encoded) {
+            @Element(name = "bytes") String encoded) throws IOException {
             this.filename = filename;
             this.encoded = FileUtil.encodeFileToBase64Binary(encoded);
     }

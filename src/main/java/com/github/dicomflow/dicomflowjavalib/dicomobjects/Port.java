@@ -1,5 +1,6 @@
 package com.github.dicomflow.dicomflowjavalib.dicomobjects;
 
+import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Root;
 
 import java.util.Map;
@@ -9,7 +10,7 @@ import java.util.Map;
  */
 @Root
 public class Port extends ValueObject{
-    public Port(String value) {
+    public Port(@Attribute(name = "value") String value) {
         super(value);
     }
 

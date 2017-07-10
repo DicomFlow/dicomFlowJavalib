@@ -34,7 +34,7 @@ public class Service implements IDicomFlowObjects {
     public Service(
             @Attribute(name = "name") String name,
             @Attribute(name = "action") String action,
-            @Attribute(name = "from") String from,
+            @Element(name = "from") String from,
             @Attribute(name = "version") String version,
             @Element(name = "timeout") String timeout,
             @Element(name = "timestamp") String timestamp,

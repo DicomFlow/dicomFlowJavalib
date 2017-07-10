@@ -23,7 +23,7 @@ public class RequestResult extends Request{
     @ElementList(name = "results", inline = true) public final List<Result> results;
 
     public RequestResult(
-            @Attribute(name = "from") String from,
+            @Element(name = "from") String from,
             @ElementList(name = "results", inline = true) List<Result> results) {
         super("RESULT", from);
         this.results = results;

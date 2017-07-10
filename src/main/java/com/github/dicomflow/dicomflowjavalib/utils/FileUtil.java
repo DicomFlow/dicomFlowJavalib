@@ -4,7 +4,6 @@ import org.apache.commons.codec.binary.Base64;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 
@@ -13,29 +12,19 @@ import java.io.IOException;
  */
 
 public class FileUtil {
-    public static String encodeFileToBase64Binary(String filePath){
+    public static String encodeFileToBase64Binary(String filePath) throws IOException {
         String encodedFile = null;
-        try {
-            File file = new File(filePath);
-            FileInputStream fileInputStreamReader = new FileInputStream(file);
-            byte[] bytes = new byte[(int)file.length()];
-            fileInputStreamReader.read(bytes);
-            encodedFile = Base64.encodeBase64String(bytes);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
+        File file = new File(filePath);
+        FileInputStream fileInputStreamReader = new FileInputStream(file);
+        byte[] bytes = new byte[(int)file.length()];
+        fileInputStreamReader.read(bytes);
+        encodedFile = Base64.encodeBase64String(bytes);
+
         return encodedFile;
     }
 
     public static byte[] decodeFileToBinaryBase64(String encodedFile){
-        try {
-            byte[] bytea = Base64.decodeBase64(encodedFile);
-            return bytea;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
+        return Base64.decodeBase64(encodedFile);
     }
 }
