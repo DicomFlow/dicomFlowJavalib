@@ -11,14 +11,16 @@ import java.util.Map;
  */
 
 @Root
-public class Credentials {
+public class Credentials extends SimplestDicomFlowObject{
     @Element(name = "value") public final String value;
 
     public Credentials(@Element(name = "value") String value) {
+        super();
         this.value = value;
     }
 
     public Credentials(Map<String, Object> params) {
+        super(params);
         this.value = (String) params.get("value");
     }
 
@@ -26,5 +28,13 @@ public class Credentials {
         Map<String, Object> map = new HashMap<>();
         map.put("value", value);
         return map;
+    }
+
+    @Override
+    public void verifyParams(Map<String, Object> params) throws DicomFlowObjectsParamMissingException {
+        if (!params.containsKey("value"))
+            throw new DicomFlowObjectsParamMissingException("Param 'value' is missing for Credentials.");
+        if ( params.get("value") == null)
+            throw new ValueForParamShouldNotBeNullException("Param value should not be null.");
     }
 }

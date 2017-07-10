@@ -4,6 +4,7 @@ dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile files('libs/simple-xml-2.7.1.jar')
     compile files('libs/commons-codec-1.10.jar')
+    compile 'junit:junit:4.12'
 }
 
 sourceCompatibility = "1.7"

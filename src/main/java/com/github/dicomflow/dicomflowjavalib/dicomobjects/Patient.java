@@ -1,5 +1,7 @@
 package com.github.dicomflow.dicomflowjavalib.dicomobjects;
 
+import com.github.dicomflow.dicomflowjavalib.IDicomFlowObjects;
+
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
@@ -14,7 +16,7 @@ import java.util.Map;
  */
 
 @Root
-public class Patient {
+public class Patient extends SimplestDicomFlowObject{
     @Attribute public final String id;
     @Attribute public final String name;
     @Attribute public final String gender;
@@ -43,8 +45,6 @@ public class Patient {
         this.studies = new ArrayList<>();
         List<Map<String, Object>> paramsStudies = (List<Map<String, Object>>) params.get("studies");
         for (Map<String, Object> paramsStudy : paramsStudies) {
-            //TODO verificar esse null aqui
-            if(paramsStudy == null) continue;
             this.studies.add(new Study( paramsStudy));
         }
 
@@ -56,9 +56,30 @@ public class Patient {
         map.put("name", name);
         map.put("gender", gender);
         map.put("birthdate", birthdate);
-        Map<String, Object> mapList = new HashMap<String, Object>();
-        for (Study p : studies) mapList.put(p.id, p.toMap());
+        List<Map<String, Object>> mapList = new ArrayList<>();
+        for (Study p : studies) mapList.add(p.toMap());
         map.put("studies", mapList);
         return map;
+    }
+
+    @Override
+    public void verifyParams(Map<String, Object> params) throws DicomFlowObjectsParamMissingException, ValueForParamShouldNotBeNullException {
+        if (!params.containsKey("id"))
+            throw new DicomFlowObjectsParamMissingException("Param id is missing to Patient.");
+        if (!params.containsKey("name"))
+            throw new DicomFlowObjectsParamMissingException("Param name is missing to Patient.");
+        if (!params.containsKey("gender"))
+            throw new DicomFlowObjectsParamMissingException("Param gender is missing to Patient.");
+        if (!params.containsKey("birthdate"))
+            throw new DicomFlowObjectsParamMissingException("Param birthdate is missing to Patient.");
+
+        if ( !params.containsKey("studies"))
+            throw new DicomFlowObjectsParamMissingException("Param studies is missing for Patient.");
+        if ( params.get("studies") == null)
+            throw new ValueForParamShouldNotBeNullException("Param studies is null and has to be a list not empty.");
+        if ( !(params.get("studies") instanceof List))
+            throw new ValueForParamMustBeAListNotEmptyException("Param studies must be a list type.");
+        if ( ( (List)params.get("studies")).isEmpty())
+            throw new ValueForParamMustBeAListNotEmptyException("Param studies must be a not empty list.");
     }
 }

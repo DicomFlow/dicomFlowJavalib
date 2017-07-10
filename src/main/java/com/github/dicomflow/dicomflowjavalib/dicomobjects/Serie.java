@@ -4,6 +4,7 @@ import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Root;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -11,7 +12,7 @@ import java.util.Map;
  */
 
 @Root
-public class Serie {
+public class Serie extends SimplestDicomFlowObject {
     @Attribute public final String id;
     @Attribute public final String bodypart;
     @Attribute public final String description;
@@ -29,10 +30,11 @@ public class Serie {
     }
 
     public Serie(Map<String, Object> params) {
+        super(params);
         this.id = (String) params.get("id");
         this.bodypart = (String) params.get("bodypart");
         this.description = (String) params.get("description");
-        this.instances = ((Long) params.get("instances")).intValue();
+        this.instances = ((Number) params.get("instances")).intValue();
     }
 
     public Map<String, Object> toMap() {
@@ -42,5 +44,26 @@ public class Serie {
         map.put("description", description);
         map.put("instances", instances);
         return map;
+    }
+
+    @Override
+    public void verifyParams(Map<String, Object> params) throws DicomFlowObjectsParamMissingException, ValueForParamShouldNotBeNullException {
+        if (!params.containsKey("id"))
+            throw new DicomFlowObjectsParamMissingException("Param completed is missing to Result.");
+        if (!params.containsKey("bodypart"))
+            throw new DicomFlowObjectsParamMissingException("Param originalMessageID is missing to Result.");
+        if (!params.containsKey("description"))
+            throw new DicomFlowObjectsParamMissingException("Param timestamp is missing to Result.");
+        if (!params.containsKey("instances"))
+            throw new DicomFlowObjectsParamMissingException("Param timestamp is missing to Result.");
+
+        if ( params.get("id") == null)
+            throw new ValueForParamShouldNotBeNullException("Param id should not be null.");
+        if ( params.get("bodypart") == null)
+            throw new ValueForParamShouldNotBeNullException("Param bodypart should not be null.");
+        if ( params.get("description") == null)
+            throw new ValueForParamShouldNotBeNullException("Param description should not be null.");
+        if ( params.get("instances") == null)
+            throw new ValueForParamShouldNotBeNullException("Param instances should not be null.");
     }
 }

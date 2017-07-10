@@ -15,19 +15,11 @@ import java.util.Map;
 @Root(name = "service")
 public class RequestPut extends Request {
 
-    public RequestPut(Map<String, Object> params) {
-        super(params);
-
-        this.requestType = (String) params.get("requestType");
-        this.url = new Url((Map<String, Object> )params.get("url"));
-    }
-
     public enum RequestType { Report, Processing }
 
     @Element(name = "requestType") public final String requestType;
     @Element(name = "url") public final Url url;
-
-    public RequestPut(@Attribute(name = "from") String from,
+    public RequestPut(@Element(name = "from") String from,
                       @Element(name = "requestType") String requestType,
                       @Element(name = "url") Url url) {
         super("PUT", from);
@@ -49,11 +41,28 @@ public class RequestPut extends Request {
         this.url = url;
     }
 
+    public RequestPut(Map<String, Object> params) {
+        super(params);
+
+        this.requestType = (String) params.get("requestType");
+        this.url = new Url((Map<String, Object> )params.get("url"));
+    }
+
+
     @Override
     public Map<String, Object> toMap() {
         Map<String, Object> map = super.toMap();
         map.put("requestType", requestType);
         map.put("url", url.toMap());
         return map;
+    }
+
+    @Override
+    public void verifyParams(Map<String, Object> params) throws DicomFlowObjectsParamMissingException, ValueForParamShouldNotBeNullException {
+        super.verifyParams(params);
+        if (!params.containsKey("requestType"))
+            throw new DicomFlowObjectsParamMissingException("Param requestType is missing for RequestPut.");
+        if (!params.containsKey("url"))
+            throw new DicomFlowObjectsParamMissingException("Param url is missing for RequestPut.");
     }
 }

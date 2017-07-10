@@ -1,4 +1,4 @@
-package com.github.dicomflow.dicomflowjavalib;
+package com.github.dicomflow.dicomflowjavalib.utils;
 
 
 import com.github.dicomflow.dicomflowjavalib.services.Service;
@@ -20,13 +20,25 @@ import java.io.IOException;
 
 public class DicomFlowXmlSerializer {
 
-    public static Service deserialize(String filepath) throws Exception {
+    private static DicomFlowXmlSerializer instance;
+
+    private DicomFlowXmlSerializer() {
+    }
+
+    public static DicomFlowXmlSerializer getInstance() {
+        if (instance == null) {
+            instance = new DicomFlowXmlSerializer();
+        }
+        return instance;
+    }
+
+    public Service deserialize(String filepath) throws Exception {
         Serializer serializer = new Persister();
         File file = new File(filepath);
         return serializer.read(getXmlClass(filepath), file);
     }
 
-    public static Class<? extends Service> getXmlClass(String filepath) throws IOException {
+    public Class<? extends Service> getXmlClass(String filepath) throws IOException {
 
         FileReader reader = new FileReader(filepath);
         BufferedReader bufferedReader = new BufferedReader(reader);
@@ -57,9 +69,9 @@ public class DicomFlowXmlSerializer {
     }
 
     public static String serialize(Service service, File root) throws Exception {
+
         Serializer serializer = new Persister();
 
-//        File root = new File(Environment.getExternalStorageDirectory(), "DicomFiles");
         root.mkdirs();
 
         File xmlFile = new File(root, String.format("%s_%s.xml", service.name.toLowerCase(), service.action));
@@ -89,46 +101,5 @@ public class DicomFlowXmlSerializer {
 
         return xmlFile.getAbsolutePath();
     }
-
-    public static String serialize(Object o, File root) {
-        Serializer serializer = new Persister();
-
-        try {
-//            File root = new File(Environment.getExternalStorageDirectory(), "DicomFiles");
-            root.mkdirs();
-
-            File xmlFile = new File(root, String.format("%s.xml", o.getClass().getSimpleName()));
-            if (xmlFile.exists ()) xmlFile.delete();
-
-            xmlFile.createNewFile();
-
-            FileWriter writer = new FileWriter(xmlFile);
-            serializer.write(o, writer);
-            writer.flush();
-            writer.close();
-
-            FileReader reader = new FileReader(xmlFile);
-            BufferedReader bufferedReader = new BufferedReader(reader);
-            String sCurrentLine = null;
-            StringBuilder conteudo = new StringBuilder("");
-            while ((sCurrentLine = bufferedReader.readLine()) != null) {
-                conteudo.append(sCurrentLine);
-                conteudo.append("\n");
-                conteudo.append("\t");
-                if(sCurrentLine.startsWith("<\\"));
-                conteudo.deleteCharAt(conteudo.length()-1);
-            }
-
-            return conteudo.toString();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        //TODO parece errado
-        return "?????";
-    }
-
 
 }

@@ -14,7 +14,7 @@ import java.util.Map;
  */
 
 @Root
-public class Study {
+public class Study extends SimplestDicomFlowObject {
     @Attribute public final String id;
     @Attribute public final String type;
     @Attribute public final String description;
@@ -38,22 +38,20 @@ public class Study {
     }
 
     public Study(Map<String, Object> params) {
+        super(params);
         this.id = (String) params.get("id");
         this.type = (String) params.get("type");
         this.description = (String) params.get("description");
-        this.datetime = ((Long) params.get("datetime")).intValue();
-        this.size = (Long) params.get("size");
+        this.datetime = ((Number) params.get("datetime")).intValue();
+        this.size = ((Number) params.get("size")).longValue();
 
         this.series = new ArrayList<>();
         List<Map<String, Object>> paramsSeries = (List<Map<String, Object>>) params.get("series");
         for (Map<String, Object> paramSerie : paramsSeries) {
-            //TODO verificar esse null aqui
-            if(paramSerie == null) continue;
             this.series.add(new Serie( paramSerie ));
         }
 
     }
-
 
     public Map<String, Object> toMap() {
         Map<String, Object> map = new HashMap<>();
@@ -62,9 +60,32 @@ public class Study {
         map.put("description", description);
         map.put("datetime", datetime);
         map.put("size", size);
-        Map<String, Object> mapList = new HashMap<String, Object>();
-        for (Serie o : series) mapList.put(o.id, o.toMap());
+        List<Map<String, Object>> mapList = new ArrayList<>();
+        for (Serie o : series) mapList.add(o.toMap());
         map.put("series", mapList);
         return map;
+    }
+
+    @Override
+    public void verifyParams(Map<String, Object> params) throws DicomFlowObjectsParamMissingException, ValueForParamShouldNotBeNullException {
+        if (!params.containsKey("id"))
+            throw new DicomFlowObjectsParamMissingException("Param id is missing to Study.");
+        if (!params.containsKey("type"))
+            throw new DicomFlowObjectsParamMissingException("Param type is missing to Study.");
+        if (!params.containsKey("description"))
+            throw new DicomFlowObjectsParamMissingException("Param description is missing to Study.");
+        if (!params.containsKey("datetime"))
+            throw new DicomFlowObjectsParamMissingException("Param datetime is missing to Study.");
+        if (!params.containsKey("size"))
+            throw new DicomFlowObjectsParamMissingException("Param size is missing to Study.");
+
+        if ( !params.containsKey("series") )
+            throw new DicomFlowObjectsParamMissingException("Param series is missing for Study.");
+        if ( params.get("series") == null)
+            throw new ValueForParamShouldNotBeNullException("Param series is null and has to be a list not empty.");
+        if ( !(params.get("series") instanceof List))
+            throw new ValueForParamMustBeAListNotEmptyException("Param studies must be a list type.");
+        if ( ( (List)params.get("series")).isEmpty())
+            throw new ValueForParamMustBeAListNotEmptyException("Param studies must be a not empty list.");
     }
 }

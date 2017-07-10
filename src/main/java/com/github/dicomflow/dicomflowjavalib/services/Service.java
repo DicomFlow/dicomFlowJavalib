@@ -1,5 +1,7 @@
 package com.github.dicomflow.dicomflowjavalib.services;
 
+import com.github.dicomflow.dicomflowjavalib.IDicomFlowObjects;
+
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
@@ -11,7 +13,7 @@ import java.util.Map;
 import java.util.UUID;
 
 @Root(name = "service")
-public class Service  {
+public class Service implements IDicomFlowObjects {
 
     @Attribute
     public final String name;
@@ -19,9 +21,9 @@ public class Service  {
     public final String action;
     @Attribute
     public final String version;
-    @Attribute
-    public final String from;
 
+    @Element
+    public final String from;
     @Element
     public final String timeout;
     @Element
@@ -60,7 +62,17 @@ public class Service  {
     }
 
     public Service(Map<String, Object> params) {
-        this((String) params.get("name"), (String) params.get("action"), (String) params.get("from"));
+        verifyParams(params);
+
+        this.version = "1.0";
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-DD hh:mm:ssZ");
+        Date date = new Date();
+        this.name = (String) params.get("name");
+        this.action = (String) params.get("action");
+        this.timestamp = dateFormat.format(date);
+        this.messageID = UUID.randomUUID().toString();
+        this.timeout = String.valueOf(date.getTime());
+        this.from = (String) params.get("from");
     }
 
     public Map<String, Object> toMap() {
@@ -75,16 +87,23 @@ public class Service  {
 
         return result;
     }
-//    public Service(String name, String action) {
-//        SimpleDateFormat dateFormat = new SimpleDateFormat("YYYY-MM-DDhh:mm:ssZ");
-//        Date date = new Date();
-//
-//        this.name = name;
-//        this.action = action;
-//
-//        timestamp = dateFormat.format(date);
-//        messageID = UUID.randomUUID().toString();
-//        timeout = String.valueOf(date.getTime());
-//    }
+
+    @Override
+    public void verifyParams(Map<String, Object> params) throws DicomFlowObjectsParamMissingException, ValueForParamShouldNotBeNullException {
+        if (!params.containsKey("name"))
+            throw new DicomFlowObjectsParamMissingException("Param name is missing for Service.");
+        if (!params.containsKey("action"))
+            throw new DicomFlowObjectsParamMissingException("Param action is missing for Service.");
+        if (!params.containsKey("version"))
+            throw new DicomFlowObjectsParamMissingException("Param version is missing for Service.");
+        if (!params.containsKey("from"))
+            throw new DicomFlowObjectsParamMissingException("Param from is missing for Service.");
+        if (!params.containsKey("timeout"))
+            throw new DicomFlowObjectsParamMissingException("Param timeout is missing for Service.");
+        if (!params.containsKey("timestamp"))
+            throw new DicomFlowObjectsParamMissingException("Param timestamp is missing for Service.");
+        if (!params.containsKey("messageID"))
+            throw new DicomFlowObjectsParamMissingException("Param messageID is missing for Service.");
+    }
 
 }

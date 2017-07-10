@@ -9,8 +9,8 @@ import java.util.Map;
  */
 public abstract class Request extends Service {
 
-    public Request(String action, String from) {
-        super("REQUEST", action, from);
+    public Request(String action, String mail) {
+        super("REQUEST", action, mail);
     }
 
     public Request(String name, String action, String from, String version, String timeout, String timestamp, String messageID) {

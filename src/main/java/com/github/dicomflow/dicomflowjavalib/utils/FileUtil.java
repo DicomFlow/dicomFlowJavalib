@@ -1,4 +1,4 @@
-package com.github.dicomflow.dicomflowjavalib.dicomobjects;
+package com.github.dicomflow.dicomflowjavalib.utils;
 
 import org.apache.commons.codec.binary.Base64;
 
@@ -12,7 +12,7 @@ import java.io.IOException;
  * Created by ricardobarbosa on 09/07/17.
  */
 
-class FileUtil {
+public class FileUtil {
     public static String encodeFileToBase64Binary(String filePath){
         String encodedFile = null;
         try {
