@@ -2,6 +2,7 @@ package com.github.dicomflow.dicomflowjavalib.services.storage;
 
 import com.github.dicomflow.dicomflowjavalib.dicomobjects.DicomObject;
 import com.github.dicomflow.dicomflowjavalib.dicomobjects.Url;
+import com.github.dicomflow.dicomflowjavalib.services.ServiceIF;
 
 import org.simpleframework.xml.Element;
 
@@ -14,7 +15,7 @@ public class StorageUpdate extends Storage {
     @Element public final DicomObject object;
 
     public StorageUpdate(String from, Url url, DicomObject object){
-        super("UPDATE", from);
+        super("UPDATE", from, ServiceIF.STORAGE_UPDATE);
         this.url = url;
         this.object = object;
     }

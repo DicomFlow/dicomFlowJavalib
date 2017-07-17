@@ -33,10 +33,10 @@ public class Url extends SimplestDicomFlowObject{
         this.value = (String) params.get("value");
         this.credentials = new Credentials((Map<String, Object>) params.get("credentials"));
 
-        List<Map<String, Object>> paramsClientes = (List<Map<String, Object>>) params.get("patients");
+        Map<String, Object> paramsClientes = (Map<String, Object>) params.get("patients");
         this.patients =  new ArrayList<>();
-        for (Map<String, Object> key : paramsClientes) {
-            this.patients.add(new Patient(key));
+        for (String key : paramsClientes.keySet()) {
+            this.patients.add(new Patient((Map<String, java.lang.Object>) paramsClientes.get(key)));
         }
     }
 
@@ -61,9 +61,9 @@ public class Url extends SimplestDicomFlowObject{
             throw new DicomFlowObjectsParamMissingException("Param patients is missing for Url.");
         if ( params.get("patients") == null)
             throw new ValueForParamShouldNotBeNullException("Value patients is null and has to be a list not empty.");
-        if ( !(params.get("patients") instanceof List))
-            throw new ValueForParamMustBeAListNotEmptyException("Value patients must be a list type.");
-        if ( ( (List)params.get("patients")).isEmpty())
+//        if ( !(params.get("patients") instanceof HASK))
+//            throw new ValueForParamMustBeAListNotEmptyException("Value patients must be a list type.");
+        if ( ((HashMap) params.get("patients")).isEmpty())
             throw new ValueForParamMustBeAListNotEmptyException("Value patients must be a not empty list.");
 
     }

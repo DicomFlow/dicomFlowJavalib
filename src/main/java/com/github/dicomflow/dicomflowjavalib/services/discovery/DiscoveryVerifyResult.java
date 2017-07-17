@@ -1,6 +1,7 @@
 package com.github.dicomflow.dicomflowjavalib.services.discovery;
 
 import com.github.dicomflow.dicomflowjavalib.dicomobjects.Result;
+import com.github.dicomflow.dicomflowjavalib.services.ServiceIF;
 
 import org.simpleframework.xml.ElementList;
 
@@ -14,7 +15,7 @@ public abstract class DiscoveryVerifyResult extends Discovery {
     @ElementList(inline = true) public final List<Result> results;
 
     public DiscoveryVerifyResult(String from, int priority, String timezone, List<Result> results) {
-        super("VERIFYRESULT", from, priority, timezone);
+        super("VERIFYRESULT", from, ServiceIF.DISCOVERY_VERIFY_RESULT, priority, timezone);
         this.results = results;
     }
 

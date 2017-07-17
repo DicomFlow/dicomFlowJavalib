@@ -3,14 +3,11 @@ package com.github.dicomflow.dicomflowjavalib;
 import com.github.dicomflow.dicomflowjavalib.dicomobjects.Completed;
 import com.github.dicomflow.dicomflowjavalib.dicomobjects.Credentials;
 import com.github.dicomflow.dicomflowjavalib.dicomobjects.Data;
-import com.github.dicomflow.dicomflowjavalib.dicomobjects.Domain;
-import com.github.dicomflow.dicomflowjavalib.dicomobjects.Mail;
-import com.github.dicomflow.dicomflowjavalib.dicomobjects.Port;
 import com.github.dicomflow.dicomflowjavalib.dicomobjects.Url;
+import com.github.dicomflow.dicomflowjavalib.services.ServiceIF;
 import com.github.dicomflow.dicomflowjavalib.services.certificate.CertificateConfirm;
 import com.github.dicomflow.dicomflowjavalib.services.certificate.CertificateRequest;
 import com.github.dicomflow.dicomflowjavalib.services.certificate.CertificateResult;
-import com.github.dicomflow.dicomflowjavalib.services.request.Request;
 import com.github.dicomflow.dicomflowjavalib.services.request.RequestPut;
 import com.github.dicomflow.dicomflowjavalib.services.request.RequestResult;
 import com.github.dicomflow.dicomflowjavalib.utils.DicomFlowXmlSerializer;
@@ -29,6 +26,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
@@ -47,7 +46,6 @@ public class DicomFlowXmlSerializerTest {
 
     @Before
     public void setUp() throws RuntimeException, FactoryDicomFlowObjects.DicomFlowObjectException {
-
         root = new File("temp/");
 
         FactoryDicomFlowObjects factory = FactoryDicomFlowObjects.getInstance();
@@ -61,22 +59,29 @@ public class DicomFlowXmlSerializerTest {
         params.put("value", "value");
         params.put("credentials", factory.getDicomFlowObjects(Credentials.class, params).toMap());
 
+        Map<String, Object> params2 = new HashMap<>();
         List<Map<String, Object>> series = new ArrayList<>();
         params.put("bodypart", "type...");
         params.put("instances", new Long(1));
         series.add(params);
         series.add(params);
         series.add(params);
-        params.put("series", series);
+        params2.put("series", series);
+//        params.put("series", series);
+
 
         List<Map<String, Object>> studies = new ArrayList<>();
-        params.put("type", "type...");
+        params2.put("id", "id");
+        params2.put("type", "type...");
+        params2.put("description", "description...");
         params.put("description", "description...");
+        params2.put("size", new Long(1));
         params.put("size", new Long(1));
+        params2.put("datetime", new Date().getTime());
         params.put("datetime", new Date().getTime());
-        studies.add(params);
-        studies.add(params);
-        studies.add(params);
+        studies.add(params2);
+        studies.add(params2);
+        studies.add(params2);
         params.put("studies", studies);
 
         List<Map<String, Object>> patients = new ArrayList<>();
@@ -89,6 +94,7 @@ public class DicomFlowXmlSerializerTest {
         patients.add(params);
         params.put("patients", patients);
         params.put("url", factory.getDicomFlowObjects(Url.class, params).toMap());
+
 
         //necessarios para o result
         List<Map<String, Object>> results = new ArrayList<>();
@@ -112,9 +118,9 @@ public class DicomFlowXmlSerializerTest {
         params.put("urls", urls);
 
         //necessarios para o certificate request
-        params.put("domain", factory.getDicomFlowObjects(Domain.class, params).toMap());
-        params.put("mail", factory.getDicomFlowObjects(Mail.class, params).toMap());
-        params.put("port", factory.getDicomFlowObjects(Port.class, params).toMap());
+        params.put("domain", "domain...");
+        params.put("mail", "mail...");
+        params.put("port", "port ...");
 
         //certificate result
         //certificate confirm
@@ -129,6 +135,7 @@ public class DicomFlowXmlSerializerTest {
 
     @Test
     public void serializeAndDeserializeCertificateRequest() throws Exception, FactoryService.ServiceObjectException {
+        params.put("type",  ServiceIF.CERTIFICATE_REQUEST);
         CertificateRequest certificateRequestToSerialization = (CertificateRequest) factory.getService(CertificateRequest.class, params);
         String absoluthPath = dicomFlowXmlSerializer.serialize(certificateRequestToSerialization, root);
         assertThat(absoluthPath, CoreMatchers.endsWith("certificate_request.xml"));
@@ -140,6 +147,7 @@ public class DicomFlowXmlSerializerTest {
 
     @Test
     public void serializeAndDeserializeCertificateResult() throws Exception, FactoryService.ServiceObjectException {
+        params.put("type",  ServiceIF.CERTIFICATE_RESULT);
         CertificateResult certificateResultToSerialization = (CertificateResult) factory.getService(CertificateResult.class, params);
         String absoluthPath = dicomFlowXmlSerializer.serialize(certificateResultToSerialization, root);
         assertThat(absoluthPath, CoreMatchers.endsWith("certificate_result.xml"));
@@ -151,6 +159,8 @@ public class DicomFlowXmlSerializerTest {
 
     @Test
     public void serializeAndDeserializeCertificateConfirm() throws Exception, FactoryService.ServiceObjectException {
+
+        params.put("type",  ServiceIF.CERTIFICATE_CONFIRM);
         CertificateConfirm certificateConfirmToSerialization = (CertificateConfirm) factory.getService(CertificateConfirm.class, params);
         String absoluthPath = dicomFlowXmlSerializer.serialize(certificateConfirmToSerialization, root);
         assertThat(absoluthPath, CoreMatchers.endsWith("certificate_confirm.xml"));
@@ -162,6 +172,7 @@ public class DicomFlowXmlSerializerTest {
 
     @Test
     public void serializeAndDeserializeRequestPut() throws Exception, FactoryService.ServiceObjectException {
+        params.put("type",  ServiceIF.REQUEST_PUT);
         RequestPut requestPutToSerialization = (RequestPut) factory.getService(RequestPut.class, params);
         String absoluthPath = dicomFlowXmlSerializer.serialize(requestPutToSerialization, root);
         assertThat(absoluthPath, CoreMatchers.endsWith("request_put.xml"));
@@ -173,6 +184,7 @@ public class DicomFlowXmlSerializerTest {
 
     @Test
     public void serializeAndDeserializeRequestResult() throws Exception, FactoryService.ServiceObjectException {
+        params.put("type",  ServiceIF.REQUEST_RESULT);
         RequestResult requestResultToSerialization = (RequestResult) factory.getService(RequestResult.class, params);
         String absoluthPath = dicomFlowXmlSerializer.serialize(requestResultToSerialization, root);
         assertThat(absoluthPath, CoreMatchers.endsWith("request_result.xml"));
@@ -201,6 +213,27 @@ public class DicomFlowXmlSerializerTest {
     }
 
 
+    @Test
+    public void deserialiseArquivoDeDanilo() throws Exception {
 
+        //TODO TIRAR A OBRIGATORIEDADE DO TIMEOUT
+       /**
+        <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+        <service version="1.0" name="Certificate" action="Request" type="6">
+            <messageID>1c6e4925-e071-4de0-b14b-9ee40b64ecf6</messageID>
+            <timestamp>1499086740052</timestamp>
+            <domain>150.165.250.228</domain>
+            <mail>dicomflow@gmail.com</mail>
+            <port>8081</port>
+        </service>
+        */
+        File xmlFile = new File(root, "service.xdf.xml");
+        String absoluthPath = xmlFile.getAbsolutePath();
+
+        CertificateRequest certificateRequestFromDeserialization = (CertificateRequest) dicomFlowXmlSerializer.deserialize(absoluthPath);
+        assertTrue(certificateRequestFromDeserialization.messageID.equals("1c6e4925-e071-4de0-b14b-9ee40b64ecf6"));
+        assertNull(certificateRequestFromDeserialization.timeout);
+        assertEquals("O valor do port deve ser 8081.", "8081", certificateRequestFromDeserialization.port);
+    }
 
 }

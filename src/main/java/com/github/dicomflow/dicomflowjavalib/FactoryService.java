@@ -31,10 +31,6 @@ public class FactoryService {
     }
 
     public Service getService(Class<? extends Service> serviceType, Map<String, Object> params) throws ServiceObjectException{
-
-        //prepare params
-        prepareParams(serviceType,params);
-
         try {
             Constructor cons = serviceType.getConstructor(Map.class);
             return (Service) cons.newInstance(params);
@@ -52,42 +48,6 @@ public class FactoryService {
             throw new ServiceObjectException();
         }
 
-    }
-
-    public static final String VERSION = "1.0";
-    private void prepareParams(Class<? extends Service> serviceType, Map<String, Object> params) {
-        params.put("version", VERSION);
-
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-DD hh:mm:ssZ");
-        Date date = new Date();
-        params.put("timestamp",dateFormat.format(date));
-        params.put("messageID",UUID.randomUUID().toString());
-        params.put("timeout",String.valueOf(date.getTime()));
-
-        if (serviceType.equals(CertificateRequest.class)) {
-            params.put("name", "CERTIFICATE");
-            params.put("action", "REQUEST");
-        }
-        else
-        if (serviceType.equals(CertificateResult.class)) {
-            params.put("name", "CERTIFICATE");
-            params.put("action", "RESULT");
-        }
-        else
-        if (serviceType.equals(CertificateConfirm.class)) {
-            params.put("name", "CERTIFICATE");
-            params.put("action", "CONFIRM");
-        }
-        else
-        if (serviceType.equals(RequestPut.class)) {
-            params.put("name", "REQUEST");
-            params.put("action", "PUT");
-        }
-        else
-        if (serviceType.equals(RequestResult.class)) {
-            params.put("name", "REQUEST");
-            params.put("action", "RESULT");
-        }
     }
 
     // TODO: 10/07/17 analisar melhor a necessidade dessa classe

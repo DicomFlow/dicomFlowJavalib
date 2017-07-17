@@ -1,9 +1,6 @@
 package com.github.dicomflow.dicomflowjavalib.services.certificate;
 
-import com.github.dicomflow.dicomflowjavalib.IDicomFlowObjects;
-import com.github.dicomflow.dicomflowjavalib.dicomobjects.Domain;
-import com.github.dicomflow.dicomflowjavalib.dicomobjects.Mail;
-import com.github.dicomflow.dicomflowjavalib.dicomobjects.Port;
+import com.github.dicomflow.dicomflowjavalib.services.ServiceIF;
 
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
@@ -22,12 +19,12 @@ public class CertificateConfirm extends Certificate {
 
     public CertificateConfirm(
             @Element(name = "from") String from,
-            @Element(name = "domain")Domain domain,
-            @Element(name = "mail") Mail mail,
-            @Element(name = "port") Port port,
+            @Element(name = "domain")String domain,
+            @Element(name = "mail") String mail,
+            @Element(name = "port") String port,
             @Element(name = "credential") String credential,
             @Element(name = "status") String status) {
-        super("RESULT", from, domain,mail,port);
+        super("RESULT", from, ServiceIF.CERTIFICATE_CONFIRM, domain,mail,port);
         this.credential = credential;
         this.status = status;
     }
@@ -35,16 +32,17 @@ public class CertificateConfirm extends Certificate {
     public CertificateConfirm(@Attribute(name = "name") String name,
                               @Attribute(name = "action") String action,
                               @Element(name = "from") String from,
+                              @Attribute(name = "type") int type,
                               @Attribute(name = "version") String version,
                               @Element(name = "timeout") String timeout,
                               @Element(name = "timestamp") String timestamp,
                               @Element(name = "messageID")String messageID,
-                              @Element(name = "domain")Domain domain,
-                              @Element(name = "mail") Mail mail,
-                              @Element(name = "port")Port port,
+                              @Element(name = "domain")String domain,
+                              @Element(name = "mail") String mail,
+                              @Element(name = "port")String port,
                               @Element(name = "credential") String credential,
                               @Element(name = "status") String status) {
-        super(name, action, from, version, timeout, timestamp, messageID, domain, mail, port);
+        super(name, action, from, type, version, timeout, timestamp, messageID, domain, mail, port);
         this.credential = credential;
         this.status = status;
     }
@@ -66,6 +64,9 @@ public class CertificateConfirm extends Certificate {
 
     @Override
     public void verifyParams(Map<String, Object> params) throws DicomFlowObjectsParamMissingException, ValueForParamShouldNotBeNullException {
+        params.put("action", "CONFIRM");
+        params.put("type", ServiceIF.CERTIFICATE_CONFIRM);
+
         super.verifyParams(params);
 
         if (!params.containsKey("credential"))

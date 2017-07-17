@@ -49,13 +49,13 @@ public class Serie extends SimplestDicomFlowObject {
     @Override
     public void verifyParams(Map<String, Object> params) throws DicomFlowObjectsParamMissingException, ValueForParamShouldNotBeNullException {
         if (!params.containsKey("id"))
-            throw new DicomFlowObjectsParamMissingException("Param completed is missing to Result.");
+            throw new DicomFlowObjectsParamMissingException("Param id is missing to Result.");
         if (!params.containsKey("bodypart"))
-            throw new DicomFlowObjectsParamMissingException("Param originalMessageID is missing to Result.");
+            throw new DicomFlowObjectsParamMissingException("Param bodypart is missing to Result.");
         if (!params.containsKey("description"))
-            throw new DicomFlowObjectsParamMissingException("Param timestamp is missing to Result.");
+            throw new DicomFlowObjectsParamMissingException("Param description is missing to Result.");
         if (!params.containsKey("instances"))
-            throw new DicomFlowObjectsParamMissingException("Param timestamp is missing to Result.");
+            throw new DicomFlowObjectsParamMissingException("Param instances is missing to Result.");
 
         if ( params.get("id") == null)
             throw new ValueForParamShouldNotBeNullException("Param id should not be null.");

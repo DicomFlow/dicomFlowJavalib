@@ -7,7 +7,7 @@ import com.github.dicomflow.dicomflowjavalib.services.Service;
  */
 public abstract class Storage extends Service {
 
-    public Storage(String action, String from) {
-        super("STORAGE", action, from);
+    public Storage(String action, String from, int type) {
+        super("STORAGE", action, from, type);
     }
 }

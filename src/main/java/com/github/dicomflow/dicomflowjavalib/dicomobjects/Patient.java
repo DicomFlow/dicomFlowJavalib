@@ -45,6 +45,7 @@ public class Patient extends SimplestDicomFlowObject{
         this.studies = new ArrayList<>();
         List<Map<String, Object>> paramsStudies = (List<Map<String, Object>>) params.get("studies");
         for (Map<String, Object> paramsStudy : paramsStudies) {
+            if (paramsStudy == null) continue;
             this.studies.add(new Study( paramsStudy));
         }
 

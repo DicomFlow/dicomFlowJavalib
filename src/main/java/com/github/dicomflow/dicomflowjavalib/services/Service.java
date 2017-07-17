@@ -21,10 +21,13 @@ public class Service implements IDicomFlowObjects {
     public final String action;
     @Attribute
     public final String version;
+    @Attribute
+    public final int type;
+
 
     @Element
     public final String from;
-    @Element
+    @Element(required = false)
     public final String timeout;
     @Element
     public final String timestamp;
@@ -35,6 +38,7 @@ public class Service implements IDicomFlowObjects {
             @Attribute(name = "name") String name,
             @Attribute(name = "action") String action,
             @Element(name = "from") String from,
+            @Attribute(name = "type") int type,
             @Attribute(name = "version") String version,
             @Element(name = "timeout") String timeout,
             @Element(name = "timestamp") String timestamp,
@@ -46,9 +50,10 @@ public class Service implements IDicomFlowObjects {
         this.timestamp = timestamp;
         this.messageID = messageID;
         this.from = from;
+        this.type = type;
     }
 
-    public Service(String name, String action, String from) {
+    public Service(String name, String action, String from, int type) {
         this.version = "1.0";
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-DD hh:mm:ssZ");
         Date date = new Date();
@@ -59,20 +64,27 @@ public class Service implements IDicomFlowObjects {
         this.messageID = UUID.randomUUID().toString();
         this.timeout = String.valueOf(date.getTime());
         this.from = from;
+        this.type = type;
     }
 
     public Service(Map<String, Object> params) {
-        verifyParams(params);
-
-        this.version = "1.0";
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-DD hh:mm:ssZ");
         Date date = new Date();
+        params.put("timestamp", dateFormat.format(date));
+        params.put("messageID", UUID.randomUUID().toString());
+        params.put("timeout", String.valueOf(date.getTime()));
+        params.put("version", "1.0");
+
+        verifyParams(params);
+
+        this.version = (String) params.get("version");
         this.name = (String) params.get("name");
         this.action = (String) params.get("action");
-        this.timestamp = dateFormat.format(date);
-        this.messageID = UUID.randomUUID().toString();
-        this.timeout = String.valueOf(date.getTime());
+        this.timestamp = (String) params.get("timestamp");
+        this.messageID = (String) params.get("messageID");
+        this.timeout = (String) params.get("timeout");
         this.from = (String) params.get("from");
+        this.type = (int) params.get("type");
     }
 
     public Map<String, Object> toMap() {
@@ -84,18 +96,19 @@ public class Service implements IDicomFlowObjects {
         result.put("timeout", timeout);
         result.put("timestamp", timestamp);
         result.put("messageID", messageID);
+        result.put("type", type);
 
         return result;
     }
 
     @Override
     public void verifyParams(Map<String, Object> params) throws DicomFlowObjectsParamMissingException, ValueForParamShouldNotBeNullException {
+        if (!params.containsKey("version"))
+            throw new DicomFlowObjectsParamMissingException("Param version is missing for Service.");
         if (!params.containsKey("name"))
             throw new DicomFlowObjectsParamMissingException("Param name is missing for Service.");
         if (!params.containsKey("action"))
             throw new DicomFlowObjectsParamMissingException("Param action is missing for Service.");
-        if (!params.containsKey("version"))
-            throw new DicomFlowObjectsParamMissingException("Param version is missing for Service.");
         if (!params.containsKey("from"))
             throw new DicomFlowObjectsParamMissingException("Param from is missing for Service.");
         if (!params.containsKey("timeout"))

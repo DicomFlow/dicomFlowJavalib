@@ -1,6 +1,7 @@
 package com.github.dicomflow.dicomflowjavalib.services.storage;
 
 import com.github.dicomflow.dicomflowjavalib.dicomobjects.DicomObject;
+import com.github.dicomflow.dicomflowjavalib.services.ServiceIF;
 
 import org.simpleframework.xml.ElementList;
 
@@ -14,7 +15,7 @@ public class StorageDelete extends Storage {
     @ElementList(name = "objects" ) public final List<DicomObject> objects;
 
     public StorageDelete(String from, List<DicomObject> objects){
-        super("DELETE", from);
+        super("DELETE", from, ServiceIF.STORAGE_DELETE);
         this.objects = objects;
     }
 

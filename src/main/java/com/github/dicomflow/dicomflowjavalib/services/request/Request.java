@@ -9,12 +9,12 @@ import java.util.Map;
  */
 public abstract class Request extends Service {
 
-    public Request(String action, String mail) {
-        super("REQUEST", action, mail);
+    public Request(String action, String from, int type) {
+        super("REQUEST", action, from, type);
     }
 
-    public Request(String name, String action, String from, String version, String timeout, String timestamp, String messageID) {
-        super(name, action, from, version, timeout, timestamp, messageID);
+    public Request(String name, String action, String from, int type, String version, String timeout, String timestamp, String messageID) {
+        super(name, action, from, type, version, timeout, timestamp, messageID);
     }
 
     public Request(Map<String, Object> params) {

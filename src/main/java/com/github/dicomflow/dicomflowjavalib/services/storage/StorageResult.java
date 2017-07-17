@@ -2,6 +2,7 @@ package com.github.dicomflow.dicomflowjavalib.services.storage;
 
 import com.github.dicomflow.dicomflowjavalib.dicomobjects.DicomObject;
 import com.github.dicomflow.dicomflowjavalib.dicomobjects.Result;
+import com.github.dicomflow.dicomflowjavalib.services.ServiceIF;
 
 import org.simpleframework.xml.ElementList;
 
@@ -16,7 +17,7 @@ public class StorageResult extends Storage {
     @ElementList(name = "results" ) public final List<Result> results;
 
     public StorageResult(String from, List<DicomObject> objects, List<Result> results){
-        super("RESULT", from);
+        super("RESULT", from, ServiceIF.STORAGE_RESULT);
         this.objects = objects;
         this.results = results;
     }

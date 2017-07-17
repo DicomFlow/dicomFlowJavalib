@@ -3,6 +3,7 @@ package com.github.dicomflow.dicomflowjavalib.services.request;
 import com.github.dicomflow.dicomflowjavalib.dicomobjects.Result;
 import com.github.dicomflow.dicomflowjavalib.dicomobjects.Serie;
 import com.github.dicomflow.dicomflowjavalib.dicomobjects.Study;
+import com.github.dicomflow.dicomflowjavalib.services.ServiceIF;
 
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
@@ -25,19 +26,20 @@ public class RequestResult extends Request{
     public RequestResult(
             @Element(name = "from") String from,
             @ElementList(name = "results", inline = true) List<Result> results) {
-        super("RESULT", from);
+        super("RESULT", from, ServiceIF.REQUEST_RESULT);
         this.results = results;
     }
 
     public RequestResult(@Attribute(name = "name") String name,
                          @Attribute(name = "action") String action,
                          @Element(name = "from") String from,
+                         @Attribute(name = "type") int type,
                          @Attribute(name = "version") String version,
                          @Element(name = "timeout") String timeout,
                          @Element(name = "timestamp") String timestamp,
                          @Element(name = "messageID")String messageID,
                          @ElementList(name = "results", inline = true) List<Result> results) {
-        super(name, action, from, version, timeout, timestamp, messageID);
+        super(name, action, from, type, version, timeout, timestamp, messageID);
         this.results = results;
     }
 
@@ -62,7 +64,11 @@ public class RequestResult extends Request{
 
     @Override
     public void verifyParams(Map<String, Object> params) throws DicomFlowObjectsParamMissingException, ValueForParamShouldNotBeNullException {
+        params.put("action", "RESULT");
+        params.put("type", ServiceIF.REQUEST_RESULT);
+
         super.verifyParams(params);
+
 
         if ( !params.containsKey("results"))
             throw new DicomFlowObjectsParamMissingException("Param patients is missing for RequestResult.");

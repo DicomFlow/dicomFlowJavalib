@@ -48,6 +48,7 @@ public class Study extends SimplestDicomFlowObject {
         this.series = new ArrayList<>();
         List<Map<String, Object>> paramsSeries = (List<Map<String, Object>>) params.get("series");
         for (Map<String, Object> paramSerie : paramsSeries) {
+            if (paramSerie == null) continue;
             this.series.add(new Serie( paramSerie ));
         }
 

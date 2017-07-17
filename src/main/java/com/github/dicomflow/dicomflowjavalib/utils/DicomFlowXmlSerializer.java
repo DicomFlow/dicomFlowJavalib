@@ -48,6 +48,10 @@ public class DicomFlowXmlSerializer {
 
         String firstLine = bufferedReader.readLine().toLowerCase();
 
+        if (firstLine.startsWith("<?xml")) {
+            firstLine = bufferedReader.readLine().toLowerCase();
+        }
+
         if (firstLine.contains("certificate")) {
 
             if (firstLine.contains("request")) {

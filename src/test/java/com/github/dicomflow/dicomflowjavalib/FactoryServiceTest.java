@@ -3,11 +3,9 @@ package com.github.dicomflow.dicomflowjavalib;
 import com.github.dicomflow.dicomflowjavalib.dicomobjects.Completed;
 import com.github.dicomflow.dicomflowjavalib.dicomobjects.Credentials;
 import com.github.dicomflow.dicomflowjavalib.dicomobjects.Data;
-import com.github.dicomflow.dicomflowjavalib.dicomobjects.Domain;
-import com.github.dicomflow.dicomflowjavalib.dicomobjects.Mail;
-import com.github.dicomflow.dicomflowjavalib.dicomobjects.Port;
 import com.github.dicomflow.dicomflowjavalib.dicomobjects.Url;
 import com.github.dicomflow.dicomflowjavalib.services.Service;
+import com.github.dicomflow.dicomflowjavalib.services.ServiceIF;
 import com.github.dicomflow.dicomflowjavalib.services.certificate.CertificateConfirm;
 import com.github.dicomflow.dicomflowjavalib.services.certificate.CertificateRequest;
 import com.github.dicomflow.dicomflowjavalib.services.certificate.CertificateResult;
@@ -47,22 +45,29 @@ public class FactoryServiceTest {
         params.put("value", "value");
         params.put("credentials", factory.getDicomFlowObjects(Credentials.class, params).toMap());
 
+        Map<String, Object> params2 = new HashMap<>();
         List<Map<String, Object>> series = new ArrayList<>();
         params.put("bodypart", "type...");
         params.put("instances", new Long(1));
         series.add(params);
         series.add(params);
         series.add(params);
-        params.put("series", series);
+        params2.put("series", series);
+//        params.put("series", series);
+
 
         List<Map<String, Object>> studies = new ArrayList<>();
-        params.put("type", "type...");
+        params2.put("id", "id");
+        params2.put("type", "type...");
+        params2.put("description", "description...");
         params.put("description", "description...");
+        params2.put("size", new Long(1));
         params.put("size", new Long(1));
+        params2.put("datetime", new Date().getTime());
         params.put("datetime", new Date().getTime());
-        studies.add(params);
-        studies.add(params);
-        studies.add(params);
+        studies.add(params2);
+        studies.add(params2);
+        studies.add(params2);
         params.put("studies", studies);
 
         List<Map<String, Object>> patients = new ArrayList<>();
@@ -99,9 +104,9 @@ public class FactoryServiceTest {
         params.put("urls", urls);
 
         //necessarios para o certificate request
-        params.put("domain", factory.getDicomFlowObjects(Domain.class, params).toMap());
-        params.put("mail", factory.getDicomFlowObjects(Mail.class, params).toMap());
-        params.put("port", factory.getDicomFlowObjects(Port.class, params).toMap());
+        params.put("domain", "domain...");
+        params.put("mail", "mail...");
+        params.put("port", "port ...");
 
         //certificate result
         //certificate confirm
@@ -126,30 +131,35 @@ public class FactoryServiceTest {
     }
     @Test
     public void getServiceCertificateRequest() throws FactoryService.ServiceObjectException {
+        params.put("type",  ServiceIF.CERTIFICATE_REQUEST);
         Service service = factory.getService(CertificateRequest.class, params);
         verify(service, CertificateRequest.class);
     }
 
     @Test
     public void getServiceCertificateResult() throws FactoryService.ServiceObjectException {
+        params.put("type",  ServiceIF.CERTIFICATE_RESULT);
         Service service = factory.getService(CertificateResult.class, params);
         verify(service, CertificateResult.class);
     }
 
     @Test
     public void getServiceCertificateConfirm() throws FactoryService.ServiceObjectException {
+        params.put("type",  ServiceIF.CERTIFICATE_CONFIRM);
         Service service = factory.getService(CertificateConfirm.class, params);
         verify(service, CertificateConfirm.class);
     }
 
     @Test
     public void getServiceRequestPut() throws FactoryService.ServiceObjectException {
+        params.put("type",  ServiceIF.REQUEST_PUT);
         Service service = factory.getService(RequestPut.class, params);
         verify(service, RequestPut.class);
     }
 
     @Test
     public void getServiceRequestResult() throws FactoryService.ServiceObjectException {
+        params.put("type",  ServiceIF.REQUEST_RESULT);
         Service service = factory.getService(RequestResult.class, params);
         verify(service, RequestResult.class);
     }

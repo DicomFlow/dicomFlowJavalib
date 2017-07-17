@@ -1,6 +1,7 @@
 package com.github.dicomflow.dicomflowjavalib.services.find;
 
 import com.github.dicomflow.dicomflowjavalib.dicomobjects.Search;
+import com.github.dicomflow.dicomflowjavalib.services.ServiceIF;
 
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
@@ -17,7 +18,7 @@ public class FindPut extends Find {
     @Element public final String timezone;
 
     public FindPut(String from, int priority, List<Search> searches, String timezone) {
-        super("PUT", from);
+        super("PUT", from, ServiceIF.FIND_PUT);
         this.priority = priority;
         this.searches = searches;
         this.timezone = timezone;

@@ -1,6 +1,7 @@
 package com.github.dicomflow.dicomflowjavalib.services.request;
 
 import com.github.dicomflow.dicomflowjavalib.dicomobjects.Url;
+import com.github.dicomflow.dicomflowjavalib.services.ServiceIF;
 
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
@@ -22,7 +23,7 @@ public class RequestPut extends Request {
     public RequestPut(@Element(name = "from") String from,
                       @Element(name = "requestType") String requestType,
                       @Element(name = "url") Url url) {
-        super("PUT", from);
+        super("PUT", from, ServiceIF.REQUEST_PUT);
         this.requestType = requestType;
         this.url = url;
     }
@@ -31,12 +32,13 @@ public class RequestPut extends Request {
                       @Attribute(name = "action") String action,
                       @Element(name = "from") String from,
                       @Attribute(name = "version") String version,
+                      @Attribute(name = "type") int type,
                       @Element(name = "timeout") String timeout,
                       @Element(name = "timestamp") String timestamp,
                       @Element(name = "messageID")String messageID,
                       @Element(name = "requestType") String requestType,
                       @Element(name = "url") Url url) {
-        super(name, action, from, version, timeout, timestamp, messageID);
+        super(name, action, from, type, version, timeout, timestamp, messageID);
         this.requestType = requestType;
         this.url = url;
     }
@@ -59,7 +61,11 @@ public class RequestPut extends Request {
 
     @Override
     public void verifyParams(Map<String, Object> params) throws DicomFlowObjectsParamMissingException, ValueForParamShouldNotBeNullException {
+        params.put("action", "PUT");
+        params.put("type", ServiceIF.REQUEST_PUT);
+
         super.verifyParams(params);
+
         if (!params.containsKey("requestType"))
             throw new DicomFlowObjectsParamMissingException("Param requestType is missing for RequestPut.");
         if (!params.containsKey("url"))
