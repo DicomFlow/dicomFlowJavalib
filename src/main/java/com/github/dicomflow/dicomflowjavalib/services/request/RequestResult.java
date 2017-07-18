@@ -69,9 +69,8 @@ public class RequestResult extends Request{
 
         super.verifyParams(params);
 
-
         if ( !params.containsKey("results"))
-            throw new DicomFlowObjectsParamMissingException("Param patients is missing for RequestResult.");
+            throw new DicomFlowObjectsParamMissingException("Param results is missing for RequestResult.");
         if ( params.get("results") == null)
             throw new ValueForParamShouldNotBeNullException("Value results is null and has to be a list not empty.");
         if ( !(params.get("results") instanceof List))

@@ -26,4 +26,10 @@ public abstract class Request extends Service {
         Map<String, Object> map = super.toMap();
         return map;
     }
+
+    @Override
+    public void verifyParams(Map<String, Object> params) throws DicomFlowObjectsParamMissingException, ValueForParamShouldNotBeNullException {
+        params.put("name", "REQUEST");
+        super.verifyParams(params);
+    }
 }

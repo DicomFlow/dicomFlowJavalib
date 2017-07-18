@@ -56,6 +56,7 @@ public class Result extends SimplestDicomFlowObject{
         map.put("data", data.toMap());
         map.put("originalMessageID", originalMessageID);
         map.put("timestamp", timestamp);
+        map.put("data", data.toMap());
 
         List<Map<String, Object>> listOfMaps = new ArrayList<>();
         for (Url p : urls) listOfMaps.add(p.toMap());

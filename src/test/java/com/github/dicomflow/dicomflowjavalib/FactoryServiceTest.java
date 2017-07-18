@@ -70,14 +70,14 @@ public class FactoryServiceTest {
         studies.add(params2);
         params.put("studies", studies);
 
-        List<Map<String, Object>> patients = new ArrayList<>();
+        Map<String, Object> patients = new HashMap<>();
         params.put("id", "id");
         params.put("name", "name");
         params.put("gender", "gender");
         params.put("birthdate", "birthdate");
-        patients.add(params);
-        patients.add(params);
-        patients.add(params);
+        patients.put("1", params);
+        patients.put("2", params);
+        patients.put("3", params);
         params.put("patients", patients);
         params.put("url", factory.getDicomFlowObjects(Url.class, params).toMap());
 

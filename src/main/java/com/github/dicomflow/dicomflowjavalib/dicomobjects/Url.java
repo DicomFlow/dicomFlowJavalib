@@ -45,8 +45,8 @@ public class Url extends SimplestDicomFlowObject{
         map.put("value", value);
         map.put("credentials", credentials.toMap());
 
-        List<Map<String, Object>> mapList = new ArrayList<>();
-        for (Patient p : patients) mapList.add(p.toMap());
+        Map<String, Object> mapList = new HashMap<>();
+        for (Patient p : patients) mapList.put(p.id, p.toMap());
         map.put("patients", mapList);
         return map;
     }
