@@ -42,7 +42,7 @@ public class Data extends SimplestDicomFlowObject{
 
     @Override
     public void verifyParams(Map<String, Object> params) throws DicomFlowObjectsParamMissingException, ValueForParamShouldNotBeNullException {
-        if (!params.containsKey("encoded"))
+        if (!params.containsKey("bytes"))
             throw new DicomFlowObjectsParamMissingException("Param encoded is missing for Data.");
         if (!params.containsKey("filename"))
             throw new DicomFlowObjectsParamMissingException("Param filename is missing for Data.");

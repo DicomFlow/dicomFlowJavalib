@@ -89,7 +89,7 @@ public class FactoryServiceTest {
         params.put("status", Completed.Status.SUCCESS.name());
         params.put("completedMessage", "completedMessage...");
         params.put("completed", factory.getDicomFlowObjects(Completed.class, params).toMap());
-        params.put("encoded", "bytes...");
+        params.put("bytes", "bytes...");
         params.put("filename", "filename...");
         params.put("data", factory.getDicomFlowObjects(Data.class, params).toMap());
         results.add(params);
