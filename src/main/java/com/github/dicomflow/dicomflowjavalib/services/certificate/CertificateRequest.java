@@ -13,12 +13,17 @@ import java.util.Map;
  */
 public class CertificateRequest extends Certificate {
 
+    @Element(required = false) //base64
+    public final String publickey;
+
     public CertificateRequest(
             @Element(name = "from") String from,
-            @Element(name = "domain")String domain,
-            @Element(name = "mail") String mail,
-            @Element(name = "port")String port) {
+            @Element(name = "domain", required = false)String domain,
+            @Element(name = "mail", required = false) String mail,
+            @Element(name = "port") String port,
+            @Element(name = "publickey") String publickey) {
         super("REQUEST", from, ServiceIF.CERTIFICATE_REQUEST, domain, mail, port);
+        this.publickey = publickey;
     }
 
     public CertificateRequest(@Attribute(name = "name") String name,
@@ -31,17 +36,21 @@ public class CertificateRequest extends Certificate {
                       @Element(name = "messageID")String messageID,
                       @Element(name = "domain")String domain,
                       @Element(name = "mail") String mail,
-                      @Element(name = "port")String port) {
+                              @Element(name = "port")String port,
+    @Element(name = "publickey")String publickey) {
         super(name, action, from, type, version, timeout, timestamp, messageID, domain, mail, port);
+        this.publickey = publickey;
     }
 
     public CertificateRequest(Map<String, Object> params) {
         super(params);
+        this.publickey = (String) params.get("publickey");
     }
 
     @Override
     public Map<String, Object> toMap() {
         Map<String, Object> map = super.toMap();
+        map.put("publickey", publickey);
         return map;
     }
 
