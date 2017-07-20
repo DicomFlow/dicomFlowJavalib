@@ -24,19 +24,19 @@ public class Data extends SimplestDicomFlowObject{
             @Attribute(name = "filename") String filename,
             @Element(name = "bytes") String encoded) throws IOException {
             this.filename = filename;
-            this.encoded = FileUtil.encodeFileToBase64Binary(encoded);
+            this.encoded = encoded;
     }
 
     public Data(Map<String, Object> params) {
         super(params);
         this.filename = (String) params.get("filename");
-        this.encoded = (String) params.get("encoded");
+        this.encoded = (String) params.get("bytes");
     }
 
     public Map<String, Object> toMap() {
         Map<String, Object> map = new HashMap<>();
         map.put("filename", filename);
-        map.put("encoded", encoded);
+        map.put("bytes", encoded);
         return map;
     }
 

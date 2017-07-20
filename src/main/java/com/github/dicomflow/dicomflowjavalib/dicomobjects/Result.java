@@ -53,6 +53,7 @@ public class Result extends SimplestDicomFlowObject{
     public Map<String, Object> toMap() {
         Map<String, Object> map = new HashMap<>();
         map.put("completed", completed.toMap());
+        map.put("data", data.toMap());
         map.put("originalMessageID", originalMessageID);
         map.put("timestamp", timestamp);
 
