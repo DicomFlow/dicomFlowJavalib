@@ -73,7 +73,7 @@ public class CertificateResult extends Certificate {
         super.verifyParams(params);
 
         if (!params.containsKey("status"))
-            throw new DicomFlowObjectsParamMissingException("Param credential is missing to CertificateConfirm");
+            throw new DicomFlowObjectsParamMissingException("Param status is missing to CertificateConfirm");
 
         if ( params.containsKey("credential") && params.get("credential") == null)
             throw new ValueForParamShouldNotBeNullException("Value credential should not be null.");
